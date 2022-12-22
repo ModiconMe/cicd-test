@@ -1,0 +1,74 @@
+name: CICD
+
+on:
+  push:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15.1
+        env:
+          POSTGRES_DB: fullstack_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v1.4.3
+        with:
+          java-version: 1.17
+
+      - name: Build Number
+        id: build-number
+        run: echo "::set-output name=BUILD_NUMBER::$(date '+%-d.%-m.%Y.%-H.%-M.%-S')"
+
+      - name: Docker Login
+        uses: docker/login-action@f3364599c6aa293cdc2b8391b1b56d0c30e45c8a
+        with:
+          username: modiconme
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Maven Clean Package and Push to Dockerhub
+        run: |
+          ./mvnw --no-transfer-progress clean package \
+            -P build-frontend \
+            -P jib-push-to-dockerhub \
+
+      - name: Update and commit app version in docker-compose.yaml
+        run: |
+          BUILD_NUMBER=${{steps.build-number.outputs.BUILD_NUMBER}}
+          echo -e "Current yandexcloud/docker-compose.yml\n$(cat yandexcloud/docker-compose.yml)"
+          sed -i -E 's_(modiconme/cicd-test:)([^"]*)_\1'${BUILD_NUMBER}'_' yandexcloud/docker-compose.yml
+          echo -e "Current yandexcloud/docker-compose.yml\n$(cat yandexcloud/docker-compose.yml)"
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add yandexcloud/docker-compose.yml
+          git commit -m "new app version: ${BUILD_NUMBER}"
+          git push
+
+      - name: Deploy COI VM
+        id: deploy-coi
+        uses: yc-actions/yc-coi-deploy@v1.0.1
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
+          folder-id: ${{ secrets.YC_FOLDER_ID }}
+          VM-name: ${{ secrets.YC_VM_NAME }}
+          vm-service-account-id: ${{ secrets.YC_SERVICE_ACCOUNT_ID }}
+          vm-cores: 2
+          vm-platform-id: 'standard-v2'
+          vm-memory: 512Mb
+          vm-disk-size: 30Gb
+          vm-core-fraction: 5
+          vm-subnet-id: ${{ secrets.YC_SUBNET_ID }}
+          docker-compose-path: './yandexcloud/docker-compose.yc.yaml'
+          user-data-path: './yandexcloud/user-data.yaml'
+        if: always()
