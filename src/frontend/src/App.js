@@ -11,7 +11,7 @@ import {
     Badge,
     Tag,
     Avatar,
-    Radio, Popconfirm
+    Radio, Popconfirm, Image
 } from 'antd';
 
 import {
@@ -218,7 +218,11 @@ function App() {
                     {renderStudents()}
                 </div>
             </Content>
-            <Footer style={{textAlign: 'center'}}>By Dmitry</Footer>
+            <Footer style={{textAlign: 'center'}}>
+            <Image width={75}
+            src = "https://user-images.githubusercontent.com/109029629/209098736-8613c8d4-bf41-44cb-aa5a-329bf23fb5a6.jpg"
+            />
+            </Footer>
         </Layout>
     </Layout>
 }
