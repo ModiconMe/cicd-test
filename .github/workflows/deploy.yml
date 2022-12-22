@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -44,32 +44,24 @@ jobs:
             -P jib-push-to-dockerhub \
               -Dapp.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}}
 
-#      - name: Update and commit app version in docker-compose.yaml
-#        run: |
-#          BUILD_NUMBER=${{steps.build-number.outputs.BUILD_NUMBER}}
-#          echo -e "Current yandexcloud/docker-compose.yml\n$(cat yandexcloud/docker-compose.yml)"
-#          sed -i -E 's_(modiconme/cicd-test:)([^"]*)_\1'${BUILD_NUMBER}'_' yandexcloud/docker-compose.yml
-#          echo -e "Current yandexcloud/docker-compose.yml\n$(cat yandexcloud/docker-compose.yml)"
-#          git config user.name github-actions
-#          git config user.email github-actions@github.com
-#          git add yandexcloud/docker-compose.yml
-#          git commit -m "new app version: ${BUILD_NUMBER}"
-#          git push
-
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
       - name: Deploy COI VM
         id: deploy-coi
-        uses: yc-actions/yc-coi-deploy@v1.0.1
+        uses: yc-actions/yc-coi-deploy@v1
         with:
           yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
-          folder-id: ${{ secrets.YC_FOLDER_ID }}
-          VM-name: ${{ secrets.YC_VM_NAME }}
-          vm-service-account-id: ${{ secrets.YC_SERVICE_ACCOUNT_ID }}
-#          vm-cores: 2
-#          vm-platform-id: 'standard-v2'
-#          vm-memory: 512Mb
-#          vm-disk-size: 30Gb
-#          vm-core-fraction: 5
-          vm-subnet-id: ${{ secrets.YC_SUBNET_ID }}
-          docker-compose-path: '/yandexcloud/docker-compose.yc.yaml'
-          user-data-path: '/yandexcloud/user-data.yaml'
-#        if: always()
+          folder-id: b1gcankbjb4530kbr4hf
+          VM-name: fhm2po9k5lqeodgfi6gg
+          vm-service-account-id: YCM9IzbJkPxIRtdIAfhGN1QPFGjp-k6aifegoJ3b
+          vm-cores: 2
+          vm-platform-id: 'standard-v2'
+          vm-memory: 512Mb
+          vm-disk-size: 30Gb
+          vm-core-fraction: 5
+          vm-subnet-id: e9b0m52mjei6f6dluvgc
+          docker-compose-path: './yandexcloud/docker-compose.yaml'
+          user-data-path: './yandexcloud/user-data.yaml'
