@@ -44,17 +44,17 @@ jobs:
             -P jib-push-to-dockerhub \
               -Dapp.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}}
 
-      - name: Update and commit app version in docker-compose.yaml
-        run: |
-          BUILD_NUMBER=${{steps.build-number.outputs.BUILD_NUMBER}}
-          echo -e "Current yandexcloud/docker-compose.yml\n$(cat yandexcloud/docker-compose.yml)"
-          sed -i -E 's_(modiconme/cicd-test:)([^"]*)_\1'${BUILD_NUMBER}'_' yandexcloud/docker-compose.yml
-          echo -e "Current yandexcloud/docker-compose.yml\n$(cat yandexcloud/docker-compose.yml)"
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add yandexcloud/docker-compose.yml
-          git commit -m "new app version: ${BUILD_NUMBER}"
-          git push
+#      - name: Update and commit app version in docker-compose.yaml
+#        run: |
+#          BUILD_NUMBER=${{steps.build-number.outputs.BUILD_NUMBER}}
+#          echo -e "Current yandexcloud/docker-compose.yml\n$(cat yandexcloud/docker-compose.yml)"
+#          sed -i -E 's_(modiconme/cicd-test:)([^"]*)_\1'${BUILD_NUMBER}'_' yandexcloud/docker-compose.yml
+#          echo -e "Current yandexcloud/docker-compose.yml\n$(cat yandexcloud/docker-compose.yml)"
+#          git config user.name github-actions
+#          git config user.email github-actions@github.com
+#          git add yandexcloud/docker-compose.yml
+#          git commit -m "new app version: ${BUILD_NUMBER}"
+#          git push
 
       - name: Deploy COI VM
         id: deploy-coi
@@ -64,12 +64,12 @@ jobs:
           folder-id: ${{ secrets.YC_FOLDER_ID }}
           VM-name: ${{ secrets.YC_VM_NAME }}
           vm-service-account-id: ${{ secrets.YC_SERVICE_ACCOUNT_ID }}
-          vm-cores: 2
-          vm-platform-id: 'standard-v2'
-          vm-memory: 512Mb
-          vm-disk-size: 30Gb
-          vm-core-fraction: 5
+#          vm-cores: 2
+#          vm-platform-id: 'standard-v2'
+#          vm-memory: 512Mb
+#          vm-disk-size: 30Gb
+#          vm-core-fraction: 5
           vm-subnet-id: ${{ secrets.YC_SUBNET_ID }}
           docker-compose-path: './yandexcloud/docker-compose.yc.yaml'
           user-data-path: './yandexcloud/user-data.yaml'
-        if: always()
+#        if: always()
