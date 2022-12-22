@@ -1,7 +1,7 @@
 users:
-  - name: {{ env.YC_VM_USERNAME }}
+  - name: saeed
     groups: sudo
     shell: /bin/bash
     sudo: [ 'ALL=(ALL) NOPASSWD:ALL' ]
     ssh_authorized_keys:
-      - {{ env.YC_VM_SSH }}
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKaGukXbSjKu1ZoOEv3FxqAcWlfykbtPe7QTemoiR/KU rebee@DESKTOP-H6558A4
