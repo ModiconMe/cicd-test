@@ -70,6 +70,6 @@ jobs:
 #          vm-disk-size: 30Gb
 #          vm-core-fraction: 5
           vm-subnet-id: ${{ secrets.YC_SUBNET_ID }}
-#          docker-compose-path: './yandexcloud/docker-compose.yc.yaml'
+          docker-compose-path: '/yandexcloud/docker-compose.yc.yaml'
           user-data-path: '/yandexcloud/user-data.yaml'
 #        if: always()
