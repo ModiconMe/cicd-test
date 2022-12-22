@@ -26,4 +26,4 @@ jobs:
           java-version: 1.17
       - name: Maven Clean Package
         run: |
-          ./mvnw --no-transfer-progress clean package -P build-frontend
+          sudo ./mvnw --no-transfer-progress clean package -P build-frontend
