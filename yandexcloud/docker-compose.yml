@@ -1,0 +1,29 @@
+services:
+  backend:
+    image: "modiconme/springboot-react-fullstack:latest"
+    ports:
+      - "80:8080"
+    restart: "always"
+    environment:
+      SPRING_PROFILE_ACTIVE: dev
+    networks:
+      - db
+
+  postgres:
+    container_name: db
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+networks:
+  db:
+    driver: bridge
+
+
