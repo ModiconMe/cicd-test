@@ -7,42 +7,42 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:15.1
-        env:
-          POSTGRES_DB: fullstack_db
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup Java JDK
-        uses: actions/setup-java@v1.4.3
-        with:
-          java-version: 1.17
-
-      - name: Build Number
-        id: build-number
-        run: echo "::set-output name=BUILD_NUMBER::$(date '+%-d.%-m.%Y.%-H.%-M.%-S')"
-
-      - name: Docker Login
-        uses: docker/login-action@f3364599c6aa293cdc2b8391b1b56d0c30e45c8a
-        with:
-          username: modiconme
-          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-
-      - name: Maven Clean Package and Push to Dockerhub
-        run: |
-          ./mvnw --no-transfer-progress clean package \
-            -P build-frontend \
-            -P jib-push-to-dockerhub \
-              -Dapp.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}}
+#  build:
+#    runs-on: ubuntu-latest
+#    services:
+#      postgres:
+#        image: postgres:15.1
+#        env:
+#          POSTGRES_DB: fullstack_db
+#          POSTGRES_USER: postgres
+#          POSTGRES_PASSWORD: password
+#        ports:
+#          - 5432:5432
+#        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: Setup Java JDK
+#        uses: actions/setup-java@v1.4.3
+#        with:
+#          java-version: 1.17
+#
+#      - name: Build Number
+#        id: build-number
+#        run: echo "::set-output name=BUILD_NUMBER::$(date '+%-d.%-m.%Y.%-H.%-M.%-S')"
+#
+#      - name: Docker Login
+#        uses: docker/login-action@f3364599c6aa293cdc2b8391b1b56d0c30e45c8a
+#        with:
+#          username: modiconme
+#          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+#
+#      - name: Maven Clean Package and Push to Dockerhub
+#        run: |
+#          ./mvnw --no-transfer-progress clean package \
+#            -P build-frontend \
+#            -P jib-push-to-dockerhub \
+#              -Dapp.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}}
 
   deploy:
     needs: build
@@ -53,7 +53,7 @@ jobs:
         id: deploy-coi
         uses: yc-actions/yc-coi-deploy@v1
         with:
-          yc-sa-json-credentials: test
+          yc-sa-json-credentials: dom
 #          yc-sa-json-credentials: YCM9IzbJkPxIRtdIAfhGN1QPFGjp-k6aifegoJ3b
           folder-id: b1gcankbjb4530kbr4hf
           VM-name: fhm2po9k5lqeodgfi6gg
