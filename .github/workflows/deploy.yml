@@ -71,5 +71,5 @@ jobs:
           vm-disk-size: 30Gb
           vm-core-fraction: 5
           vm-subnet-id: e9b0m52mjei6f6dluvgc
-          docker-compose-path: './yandexcloud/docker-compose.yaml'
-          user-data-path: './yandexcloud/user-data.yaml'
+          docker-compose-path: 'yandexcloud/docker-compose.yaml'
+          user-data-path: 'yandexcloud/user-data.yaml'
