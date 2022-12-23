@@ -12,9 +12,5 @@ public class AppTest {
 //        Assertions.fail("oops test failed");
     }
 
-    @Test
-    void contextLoad2() {
-//        Assertions.fail("oops test failed");
-    }
     
 }
