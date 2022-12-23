@@ -1,3 +1,4 @@
+#cloud-config
 users:
   - name: saeed
     groups: sudo
