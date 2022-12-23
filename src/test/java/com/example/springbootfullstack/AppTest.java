@@ -1,16 +1,15 @@
 package com.example.springbootfullstack;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
-@SpringBootTest
+@Configuration
 public class AppTest {
 
-    @Test
-    void contextLoad() {
-//        Assertions.fail("oops test failed");
+    @Bean
+    public PropertySourcesPlaceholderConfigurer propertiesResolver() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
-
 
 }

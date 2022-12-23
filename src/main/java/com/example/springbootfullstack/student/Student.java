@@ -13,6 +13,7 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table
 public class Student {
