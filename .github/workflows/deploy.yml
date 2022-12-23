@@ -53,10 +53,10 @@ jobs:
         id: deploy-coi
         uses: yc-actions/yc-coi-deploy@v1
         with:
-          yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
+          yc-sa-json-credentials: YCM9IzbJkPxIRtdIAfhGN1QPFGjp-k6aifegoJ3b
           folder-id: b1gcankbjb4530kbr4hf
           VM-name: fhm2po9k5lqeodgfi6gg
-          vm-service-account-id: YCM9IzbJkPxIRtdIAfhGN1QPFGjp-k6aifegoJ3b
+          vm-service-account-id: ajefqiueorn277baknjo
           vm-cores: 2
           vm-platform-id: 'standard-v2'
           vm-memory: 512Mb
