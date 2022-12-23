@@ -1,3 +1,4 @@
+version: "3.8"
 services:
   backend:
     image: "modiconme/springboot-react-fullstack:latest"
@@ -5,8 +6,7 @@ services:
       - "80:8080"
     restart: "always"
     environment:
-      - "SPRING_PROFILES_ACTIVE=dev"
-    command: --spring.profiles.active=dev
+      SPRING_PROFILES_ACTIVE: dev
     networks:
       - db
 
